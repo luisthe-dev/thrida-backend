@@ -34,7 +34,8 @@ class UserController extends Controller
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
                 $tokenResult->accessToken->expires_at
-            )->toDateTimeString()
+            )->toDateTimeString(),
+            'user' => $user
         ]);
     }
 
