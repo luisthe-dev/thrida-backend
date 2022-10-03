@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,3 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'getUser
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'signup']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/transactions', [TransactionsController::class, 'getUserTransactions']);
+    Route::post('/transactions', [TransactionsController::class, 'createTransaction']);
+});
