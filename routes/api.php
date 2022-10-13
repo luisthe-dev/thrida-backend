@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -24,4 +25,15 @@ Route::post('/register', [UserController::class, 'signup']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions', [TransactionsController::class, 'getUserTransactions']);
     Route::post('/transactions', [TransactionsController::class, 'createTransaction']);
+    Route::post('/updateDeposit/{id}', [TransactionsController::class, 'updateDeposit']);
+});
+
+Route::post('/admin/login', [AdminController::class, 'login']);
+Route::post('/admin/register', [AdminController::class, 'signup']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/users', [UserController::class, 'getAllUsers']);
+    Route::patch('/admin/user/{id}', [UserController::class, 'updateUserDetails']);
+    Route::patch('/admin/user/{id}/wallet', [UserController::class, 'updateUserWallet']);
+    Route::get('/admin/transactions', [TransactionsController::class, 'getAllTransactions']);
 });

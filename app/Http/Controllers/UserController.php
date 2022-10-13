@@ -10,6 +10,72 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
 
+    public function getAllUsers()
+    {
+        return User::all();
+    }
+
+    public function updateUserWallet(Request $request, $id)
+    {
+        $request->validate([
+            'amount' => 'required|string',
+            'wallet_type' => 'required|image',
+        ]);
+
+        $user = User::find($id);
+        $user_wallets = json_decode($user->wallets);
+        if ($request->wallet_type === 'Demo') {
+            $user_wallets->demo_wallet = floatval($user_wallets->demo_wallet) + floatval($request->amount);
+        } elseif ($request->wallet_type === 'Live') {
+            $user_wallets->real_wallet = floatval($user_wallets->real_wallet) + floatval($request->amount);
+        } else {
+            return response()->json([
+                'message' => 'Invalid wallet type',
+            ], 400);
+        }
+        $user->wallets = json_encode($user_wallets);
+        $user->save();
+
+        return response()->json([
+            'message' => 'User wallet updated successfully',
+            'user' => $user
+        ], 200);
+    }
+
+    public function updateUserDetails(Request $request, $id)
+    {
+
+        $user = User::find($id);
+        $user->update($request->all());
+
+        return response()->json([
+            'message' => 'User details updated successfully',
+            'user' => $user
+        ], 200);
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::find($id);
+        $user->update([
+            'is_deleted' => true,
+        ]);
+        return response()->json([
+            'message' => 'User deleted successfully'
+        ]);
+    }
+
+    public function freezeUser($id)
+    {
+        $user = User::find($id);
+        $user->update([
+            'is_frozen' => true,
+        ]);
+        return response()->json([
+            'message' => 'User frozen successfully'
+        ]);
+    }
+
     //User Login
     public function login(Request $request)
     {
@@ -49,7 +115,7 @@ class UserController extends Controller
         ]);
 
         $newWallet = json_encode([
-            'demo_wallet' => 35000000,
+            'demo_wallet' => 350000,
             'real_wallet' => 0,
             'tournament_wallet' => 0,
         ]);
