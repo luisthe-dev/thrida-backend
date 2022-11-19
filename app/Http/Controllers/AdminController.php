@@ -13,11 +13,11 @@ class AdminController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email',
+            'username' => 'required|string',
             'password' => 'required|string',
             'remember_me' => 'boolean'
         ]);
-        $user = Admin::where('email', $request->email)->first();
+        $user = Admin::where('username', $request->username)->first();
         if (!$user)
             return response()->json([
                 'message' => 'Admin does not exist'

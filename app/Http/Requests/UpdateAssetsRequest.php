@@ -2,28 +2,18 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Admin;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
 
-class StoreAdminRequest extends FormRequest
+class UpdateAssetsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize(Request $request)
+    public function authorize()
     {
-        $user = $request->user();
-
-        $isUser = Admin::where('email', $user->email)->first();
-
-        if ($isUser) {
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
     /**

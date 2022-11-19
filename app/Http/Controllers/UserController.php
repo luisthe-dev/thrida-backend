@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAdminRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,6 +14,11 @@ class UserController extends Controller
     public function getAllUsers()
     {
         return User::all();
+    }
+
+    public function getUserDetails(StoreAdminRequest $request, $id)
+    {
+        return User::where('id', $id)->get();
     }
 
     public function updateUserWallet(Request $request, $id)

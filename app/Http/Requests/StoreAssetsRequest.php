@@ -6,7 +6,7 @@ use App\Models\Admin;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
-class StoreAdminRequest extends FormRequest
+class StoreAssetsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,6 +15,13 @@ class StoreAdminRequest extends FormRequest
      */
     public function authorize(Request $request)
     {
+        $request->validate([
+            'asset_name'  => 'required|string',
+            'volatility' => 'required|string',
+            'level' => 'required|string',
+            'status' => 'required|string'
+        ]);
+
         $user = $request->user();
 
         $isUser = Admin::where('email', $user->email)->first();
@@ -34,7 +41,10 @@ class StoreAdminRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'asset_name'  => 'required|string',
+            'volatility' => 'required|string',
+            'level' => 'required|string',
+            'status' => 'required|integer'
         ];
     }
 }
