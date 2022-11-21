@@ -40,11 +40,6 @@ class StoreAssetsRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'asset_name'  => 'required|string',
-            'volatility' => 'required|string',
-            'level' => 'required|string',
-            'status' => 'required|integer'
-        ];
+        return [];
     }
 }
