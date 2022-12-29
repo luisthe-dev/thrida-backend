@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('assets', function (Blueprint $table) {
+        Schema::create('deposits', function (Blueprint $table) {
             $table->id();
-            $table->string('asset_name');
-            $table->string('volatility');
-            $table->string('level');
-            $table->boolean('status')->default(true);
+            $table->string('deposit_method');
+            $table->float('min_amount')->default(10);
+            $table->float('max_amount')->default(99999);
+            $table->longText('deposit_details');
+            $table->longText('deposit_image');
+            $table->longText('deposit_logo');
+            $table->integer('no_of_uses');
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assets');
+        Schema::dropIfExists('deposits');
     }
 };

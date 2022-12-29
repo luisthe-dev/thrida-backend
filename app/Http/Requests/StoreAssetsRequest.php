@@ -19,7 +19,7 @@ class StoreAssetsRequest extends FormRequest
             'asset_name'  => 'required|string',
             'volatility' => 'required|string',
             'level' => 'required|string',
-            'status' => 'required|string'
+            'status' => 'required|boolean'
         ]);
 
         $user = $request->user();

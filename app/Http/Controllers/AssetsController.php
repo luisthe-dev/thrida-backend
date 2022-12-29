@@ -8,11 +8,6 @@ use App\Http\Requests\UpdateAssetsRequest;
 
 class AssetsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         return Assets::all();
@@ -23,22 +18,30 @@ class AssetsController extends Controller
         return Assets::where('status', 1)->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function toggleAsset($id)
     {
-        //
+        $assetData = Assets::where('id', $id)->first();
+
+        if (!$assetData) return response()->json(['message' => 'Asset Does Not Exist'], 400);
+
+        $currentStatus = $assetData->status;
+
+        $assetData->status = !$currentStatus;
+
+        $assetData->save();
+
+        return response()->json(['message' => 'Asset Updated Successfully'], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreAssetsRequest  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function deleteAsset($id)
+    {
+        $assetData = Assets::where('id', $id)->delete();
+
+        if (!$assetData) return response()->json(['message' => 'Asset Does Not Exist'], 400);
+
+        return response()->json(['message' => 'User Deleted Successfully'], 200);
+    }
+
     public function store(StoreAssetsRequest $request)
     {
         $asset = new Assets([
@@ -51,50 +54,5 @@ class AssetsController extends Controller
         $asset->save();
 
         return response()->json(['message' => 'Asset added successfully', 'asset' => $asset], 200);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Assets  $assets
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Assets $assets)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Assets  $assets
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Assets $assets)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateAssetsRequest  $request
-     * @param  \App\Models\Assets  $assets
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateAssetsRequest $request, Assets $assets)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Assets  $assets
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Assets $assets)
-    {
-        //
     }
 }

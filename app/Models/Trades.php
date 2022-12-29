@@ -17,6 +17,7 @@ class Trades extends Model
         'percentage_win',
         'entry_value',
         'exit_value',
+        'time_period',
         'status',
     ];
 }

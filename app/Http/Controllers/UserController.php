@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAdminRequest;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,10 +14,15 @@ class UserController extends Controller
 
     public function getAllUsers()
     {
-        return User::all();
+        return User::orderByDesc('id')->paginate(25);
     }
 
-    public function getUserDetails(StoreAdminRequest $request, $id)
+    public function getProUsers()
+    {
+        return User::where('is_pro', true)->orderByDesc('id')->paginate(25);
+    }
+
+    public function getUserDetails($id)
     {
         return User::where('id', $id)->get();
     }
@@ -134,6 +140,9 @@ class UserController extends Controller
         ]);
 
         $user->save();
+
+        event(new Registered($user));
+
         return response()->json([
             'message' => 'Successfully created user!'
         ], 201);

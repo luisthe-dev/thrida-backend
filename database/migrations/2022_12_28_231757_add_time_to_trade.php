@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('assets', function (Blueprint $table) {
-            $table->id();
-            $table->string('asset_name');
-            $table->string('volatility');
-            $table->string('level');
-            $table->boolean('status')->default(true);
-            $table->timestamps();
+        Schema::table('trades', function (Blueprint $table) {
+            $table->string('time_period')->after('exit_value');
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assets');
+        Schema::table('trade', function (Blueprint $table) {
+            //
+        });
     }
 };

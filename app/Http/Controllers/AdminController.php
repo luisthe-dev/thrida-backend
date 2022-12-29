@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Transactions;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,5 +63,14 @@ class AdminController extends Controller
         return response()->json([
             'message' => 'Successfully created admin!'
         ], 201);
+    }
+
+    public function getStats()
+    {
+        $users = User::all()->count();
+        $transactions = Transactions::all()->count();
+        $proUsers = User::where('is_pro', 1)->count();
+
+        return response()->json(['user_count' => $users, 'pro_user_count' => $proUsers, 'transaction_count' => $transactions], 200);
     }
 }
