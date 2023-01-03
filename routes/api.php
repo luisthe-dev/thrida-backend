@@ -41,6 +41,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/prousers', [UserController::class, 'getProUsers']);
     Route::get('/admin/stats', [AdminController::class, 'getStats']);
     Route::get('/admin/user/{id}', [UserController::class, 'getUserDetails']);
+    Route::get('/admin/user/{id}/freeze', [UserController::class, 'freezeUser']);
+    Route::get('/admin/user/{id}/delete', [UserController::class, 'deleteUser']);
     Route::patch('/admin/user/{id}', [UserController::class, 'updateUserDetails']);
     Route::patch('/admin/user/{id}/wallet', [UserController::class, 'updateUserWallet']);
     Route::get('/admin/transactions', [TransactionsController::class, 'getAllTransactions']);

@@ -14,17 +14,17 @@ class UserController extends Controller
 
     public function getAllUsers()
     {
-        return User::orderByDesc('id')->paginate(25);
+        return User::orderByDesc('id')->where('is_deleted', 0)->paginate(25);
     }
 
     public function getProUsers()
     {
-        return User::where('is_pro', true)->orderByDesc('id')->paginate(25);
+        return User::where('is_pro', true)->where('is_deleted', 0)->orderByDesc('id')->paginate(25);
     }
 
     public function getUserDetails($id)
     {
-        return User::where('id', $id)->get();
+        return User::where('id', $id)->first();
     }
 
     public function updateUserWallet(Request $request, $id)
@@ -81,10 +81,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->update([
-            'is_frozen' => true,
+            'is_frozen' => !$user->is_frozen,
         ]);
         return response()->json([
-            'message' => 'User frozen successfully'
+            'message' => 'User updated successfully'
         ]);
     }
 
@@ -101,7 +101,17 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'User does not exist'
             ], 401);
+
         $user = $request->user();
+
+        if (!$user->is_frozen) return response()->json([
+            'message' => 'User has been suspended, contact an administrator'
+        ], 401);
+
+        if (!$user->is_deleted) return response()->json([
+            'message' => 'User does not exist'
+        ], 401);
+
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->accessToken;
         if ($request->remember_me)
