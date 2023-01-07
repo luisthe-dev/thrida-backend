@@ -104,11 +104,11 @@ class UserController extends Controller
 
         $user = $request->user();
 
-        if (!$user->is_frozen) return response()->json([
+        if ($user->is_frozen) return response()->json([
             'message' => 'User has been suspended, contact an administrator'
         ], 401);
 
-        if (!$user->is_deleted) return response()->json([
+        if ($user->is_deleted) return response()->json([
             'message' => 'User does not exist'
         ], 401);
 

@@ -5,82 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\settings;
 use App\Http\Requests\StoresettingsRequest;
 use App\Http\Requests\UpdatesettingsRequest;
+use Illuminate\Http\Request;
+
+use function GuzzleHttp\Promise\all;
 
 class SettingsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getAllSettings(Request $request)
     {
-        //
+        return settings::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function updateSetting(Request $request)
     {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoresettingsRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoresettingsRequest $request)
-    {
-        //
-    }
+        $request->validate([
+            'setting_name' => 'required|string',
+            'setting_value' => 'required|string'
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\settings  $settings
-     * @return \Illuminate\Http\Response
-     */
-    public function show(settings $settings)
-    {
-        //
-    }
+        $setting = settings::where('setting', $request->setting_name)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\settings  $settings
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(settings $settings)
-    {
-        //
-    }
+        if (!$setting) return response()->json(['message' => 'Error Validating Setting'], 400);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatesettingsRequest  $request
-     * @param  \App\Models\settings  $settings
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatesettingsRequest $request, settings $settings)
-    {
-        //
-    }
+        $setting->value = $request->setting_value;
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\settings  $settings
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(settings $settings)
-    {
-        //
+        $setting->save();
+
+        return response()->json(['message' => 'Setting Updated Successfully'], 200);
     }
 }

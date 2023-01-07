@@ -26,6 +26,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'wallets',
         'is_frozen',
         'is_deleted',
+        'is_pro',
+        'level'
     ];
 
     /**

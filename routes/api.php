@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssetsController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TradesController;
@@ -30,7 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions', [TransactionsController::class, 'getUserTransactions']);
     Route::post('/transactions', [TransactionsController::class, 'createTransaction']);
     Route::post('/updateDeposit/{id}', [TransactionsController::class, 'updateDeposit']);
-    Route::post('/trade/start', [TradesController::class, 'startTrade']);
+    Route::post('/trade', [TradesController::class, 'startTrade']);
+    Route::put('/trade/{id}', [TradesController::class, 'endTrade']);
 });
 
 Route::post('/admin/login', [AdminController::class, 'login']);
@@ -46,6 +48,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/admin/user/{id}', [UserController::class, 'updateUserDetails']);
     Route::patch('/admin/user/{id}/wallet', [UserController::class, 'updateUserWallet']);
     Route::get('/admin/transactions', [TransactionsController::class, 'getAllTransactions']);
+    Route::get('/admin/settings', [SettingsController::class, 'getAllSettings']);
+    Route::patch('/admin/setting', [SettingsController::class, 'updateSetting']);
 });
 
 

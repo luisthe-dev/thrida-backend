@@ -84,7 +84,34 @@ class TradesController extends Controller
         $trade->save();
         $user->save();
 
-        return response()->json(['message' => 'Trade Started Successfully', 'tradeDetails' => $trade, 'userDetails' => $user], 201);
+        return response()->json(['message' => 'Trade Started Successfully', 'tradeDetails' => array('id' => $trade->id), 'userDetails' => $user], 201);
+    }
+
+    public function endTrade(Request $request, $id)
+    {
+        $user = $request->user();
+
+        $walletType = $request->walletType;
+
+        $trade = Trades::where('id', $id)->first();
+
+        $tradeAmount = $trade->amount_won;
+
+        $userWallet = json_decode($user->wallets, true);
+
+        $walletBalance = $userWallet[$walletType];
+
+        $walletBalance = $walletBalance + $tradeAmount;
+
+        $userWallet[$walletType] = $walletBalance;
+
+        $user->wallets = json_encode($userWallet);
+        $trade->status = 'Completed';
+
+        $user->save();
+        $trade->save();
+
+        return response()->json(['message' => 'Trade Closed Successfully', 'tradeDetails' => $trade, 'userDetails' => $user], 200);
     }
 
     public function getUserTrades(Request $request)

@@ -12,7 +12,7 @@ class TransactionsController extends Controller
 
     public function getAllTransactions()
     {
-        return Transactions::all();
+        return Transactions::orderByDesc('id')->paginate(25);;
     }
 
     public function createTransaction(Request $request)
