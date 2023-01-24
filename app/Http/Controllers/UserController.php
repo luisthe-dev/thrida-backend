@@ -104,6 +104,10 @@ class UserController extends Controller
 
         $user = $request->user();
 
+        if (!$user->email_verified_at) return response()->json([
+            'message' => 'User account hasn\'t been verified, please check your email'
+        ], 400);
+
         if ($user->is_frozen) return response()->json([
             'message' => 'User has been suspended, contact an administrator'
         ], 401);
@@ -160,6 +164,26 @@ class UserController extends Controller
 
     public function getUserInfo(Request $request)
     {
-        return response()->json($request->user());
+
+        $user = $request->user();
+        $user_wallets = json_decode($user->wallets, true);
+
+        if (floatval($user_wallets['demo_wallet']) < 5000) $user_wallets['demo_wallet'] = 350000;
+
+        $user->wallets = json_encode($user_wallets);
+
+        $user->save();
+
+        return response()->json($user);
+    }
+
+    public function updateUserInfo(Request $request)
+    {
+
+        $user = $request->user();
+
+        $user->update($request->all());
+
+        return response()->json($user);
     }
 }

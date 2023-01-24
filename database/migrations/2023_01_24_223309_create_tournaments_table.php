@@ -13,16 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trades', function (Blueprint $table) {
+        Schema::create('tournaments', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
-            $table->float('amount');
-            $table->float('amount_won');
-            $table->integer('assets_id');
-            $table->float('percentage_win');
-            $table->string('entry_value');
-            $table->string('exit_value');
-            $table->string('status')->default('Pending');
             $table->timestamps();
         });
     }
@@ -34,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trades');
+        Schema::dropIfExists('tournaments');
     }
 };

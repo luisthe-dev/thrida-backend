@@ -6,7 +6,6 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TradesController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,25 +19,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'getUserInfo']);
-
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'signup']);
 
 Route::get('/proUsers', [UserController::class, 'getProUsers']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', [UserController::class, 'getUserInfo']);
+    Route::patch('/user', [UserController::class, 'updateUserInfo']);
     Route::get('/transactions', [TransactionsController::class, 'getUserTransactions']);
+    Route::get('/transactions/deposits', [TransactionsController::class, 'getUserDepositTransactions']);
     Route::post('/transactions', [TransactionsController::class, 'createTransaction']);
     Route::post('/updateDeposit/{id}', [TransactionsController::class, 'updateDeposit']);
     Route::post('/trade', [TradesController::class, 'startTrade']);
     Route::put('/trade/{id}', [TradesController::class, 'endTrade']);
+    Route::get('/trade', [TradesController::class, 'getUserTrades']);
 });
 
 Route::post('/admin/login', [AdminController::class, 'login']);
 Route::post('/admin/register', [AdminController::class, 'signup']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/admin/users', [UserController::class, 'getAllUsers']);
     Route::get('/admin/prousers', [UserController::class, 'getProUsers']);
     Route::get('/admin/stats', [AdminController::class, 'getStats']);
@@ -56,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/assets', [AssetsController::class, 'index']);
 Route::get('/assets/active', [AssetsController::class, 'activeIndex']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/assets', [AssetsController::class, 'store']);
     Route::patch('/assets/toggle/{id}', [AssetsController::class, 'toggleAsset']);
     Route::delete('asset/{id}', [AssetsController::class, 'deleteAsset']);

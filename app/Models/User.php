@@ -27,7 +27,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_frozen',
         'is_deleted',
         'is_pro',
-        'level'
+        'level',
+        'date_of_birth',
+        'gender',
+        'phone'
     ];
 
     /**
